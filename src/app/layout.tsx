@@ -1,9 +1,7 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import './globals.css';
-import Navigation from '@/components/layout/Navigation';
 import { getConfig } from '@/lib/config';
-import { getRuntimeI18nConfig } from '@/lib/i18n/config';
-import type { SiteConfig } from '@/lib/config';
 
 export async function generateMetadata(): Promise<Metadata> {
   const config = getConfig();
@@ -31,56 +29,55 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-function buildLocalizedConfigMaps(
-  locales: string[]
-): {
-  navigationByLocale: Record<string, SiteConfig['navigation']>;
-  siteTitleByLocale: Record<string, string>;
-} {
-  const navigationByLocale: Record<string, SiteConfig['navigation']> = {};
-  const siteTitleByLocale: Record<string, string> = {};
-
-  for (const locale of locales) {
-    const localizedConfig = getConfig(locale);
-    navigationByLocale[locale] = localizedConfig.navigation;
-    siteTitleByLocale[locale] = localizedConfig.site.title;
-  }
-
-  return {
-    navigationByLocale,
-    siteTitleByLocale,
-  };
-}
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   const config = getConfig();
-  const runtimeI18n = getRuntimeI18nConfig(config.i18n);
-  const targetLocales = runtimeI18n.enabled ? runtimeI18n.locales : [runtimeI18n.defaultLocale];
-
-  const {
-    navigationByLocale,
-    siteTitleByLocale,
-  } = buildLocalizedConfigMaps(targetLocales);
 
   return (
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <head>
         <link rel="icon" href={config.site.favicon} type="image/svg+xml" />
       </head>
-      <body className="font-sans antialiased">
-        <Navigation
-          items={config.navigation}
-          siteTitle={config.site.title}
-          enableOnePageMode={config.features.enable_one_page_mode}
-          i18n={runtimeI18n}
-          itemsByLocale={navigationByLocale}
-          siteTitleByLocale={siteTitleByLocale}
-        />
-        <main className="min-h-screen pt-16 lg:pt-20">
+      <body className="font-sans antialiased bg-white text-neutral-900">
+        <header className="fixed top-0 left-0 right-0 z-50 border-b border-neutral-200 bg-white/95 backdrop-blur">
+          <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+            <Link href="/" className="text-lg font-serif font-semibold text-primary">
+              {config.site.title}
+            </Link>
+
+            <nav className="flex items-center gap-6 text-sm font-medium text-neutral-700">
+              <Link href="/" className="hover:text-primary transition-colors">
+                About
+              </Link>
+              <Link href="/publications" className="hover:text-primary transition-colors">
+                Publications
+              </Link>
+              <Link href="/projects" className="hover:text-primary transition-colors">
+                Projects
+              </Link>
+              <Link href="/teaching" className="hover:text-primary transition-colors">
+                Teaching
+              </Link>
+              <Link href="/courses" className="hover:text-primary transition-colors">
+                Courses
+              </Link>
+              <Link href="/resources" className="hover:text-primary transition-colors">
+                Resources
+              </Link>
+              <Link href="/life" className="hover:text-primary transition-colors">
+                Life
+              </Link>
+              <Link href="/cv" className="hover:text-primary transition-colors">
+                CV
+              </Link>
+            </nav>
+          </div>
+        </header>
+
+        <main className="min-h-screen pt-24">
           {children}
         </main>
       </body>
