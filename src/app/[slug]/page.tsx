@@ -68,11 +68,19 @@ export function generateStaticParams() {
   return slugs.map((slug) => ({ slug }));
 }
 
-export async function generateMetadata({ params }: { params: { slug?: string } }): Promise<Metadata> {
-  const slug = String(params?.slug ?? '').replace(/^\/+|\/+$/g, ''); // ✅ 去掉首尾 /
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug: rawSlug } = await params;
+  const slug = String(rawSlug ?? '').replace(/^\/+|\/+$/g, '');
 
   const pageConfig = getPageConfig(slug) as BasePageConfig | null;
-  if (!pageConfig) return {};
+
+  if (!pageConfig) {
+    return {};
+  }
 
   return {
     title: pageConfig.title,
@@ -81,28 +89,47 @@ export async function generateMetadata({ params }: { params: { slug?: string } }
 }
 
 
-export default async function DynamicPage({ params }: { params: { slug?: string } }) {
-  const slug = String(params?.slug ?? '').replace(/^\/+|\/+$/g, ''); // ✅ 核心：保证是纯 slug
+export default async function DynamicPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug: rawSlug } = await params;
+  const slug = String(rawSlug ?? '').replace(/^\/+|\/+$/g, '');
 
-  if (!slug) notFound();
+  if (!slug) {
+    notFound();
+  }
 
   const baseConfig = getConfig();
   const runtimeI18n = getRuntimeI18nConfig(baseConfig.i18n);
-  const targetLocales = runtimeI18n.enabled ? runtimeI18n.locales : [runtimeI18n.defaultLocale];
+  const targetLocales = runtimeI18n.enabled
+    ? runtimeI18n.locales
+    : [runtimeI18n.defaultLocale];
 
   const dataByLocale: Record<string, DynamicPageLocaleData> = {};
 
   for (const locale of targetLocales) {
     const localizedData = loadDynamicPageData(slug, locale);
-    if (localizedData) dataByLocale[locale] = localizedData;
+    if (localizedData) {
+      dataByLocale[locale] = localizedData;
+    }
   }
 
   const defaultData = loadDynamicPageData(slug);
   if (defaultData) {
-    dataByLocale[runtimeI18n.defaultLocale] = dataByLocale[runtimeI18n.defaultLocale] || defaultData;
+    dataByLocale[runtimeI18n.defaultLocale] =
+      dataByLocale[runtimeI18n.defaultLocale] || defaultData;
   }
 
-  if (Object.keys(dataByLocale).length === 0) notFound();
+  if (Object.keys(dataByLocale).length === 0) {
+    notFound();
+  }
 
-  return <DynamicPageClient dataByLocale={dataByLocale} defaultLocale={runtimeI18n.defaultLocale} />;
+  return (
+    <DynamicPageClient
+      dataByLocale={dataByLocale}
+      defaultLocale={runtimeI18n.defaultLocale}
+    />
+  );
 }
