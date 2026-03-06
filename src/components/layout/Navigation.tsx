@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Disclosure } from '@headlessui/react';
+import { Disclosure, Menu } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { cn } from '@/lib/utils';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
@@ -49,6 +49,33 @@ export default function Navigation({
     if (!i18n.enabled) return items;
     return itemsByLocale?.[locale] || itemsByLocale?.[i18n.defaultLocale] || items;
   }, [i18n.defaultLocale, i18n.enabled, items, itemsByLocale, locale]);
+
+
+const { topLevelItems, childrenByParentTitle } = useMemo(() => {
+  const map = new Map<string, SiteConfig['navigation'][number][]>();
+
+  const groups = effectiveItems.filter((i) => i.type === 'group');
+  const pages = effectiveItems.filter((i) => i.type === 'page');
+
+  groups.forEach((g) => map.set(g.title, []));
+
+  pages.forEach((p) => {
+    const parentTitle = (p as any).parent as string | undefined;
+    if (parentTitle && map.has(parentTitle)) {
+      map.get(parentTitle)!.push(p);
+    }
+  });
+
+  const top = effectiveItems.filter((i) => {
+    if (i.type !== 'page') return true;
+    const parentTitle = (i as any).parent as string | undefined;
+    return !parentTitle;
+  });
+
+  return { topLevelItems: top, childrenByParentTitle: map };
+}, [effectiveItems]);
+
+
 
   const effectiveSiteTitle = useMemo(() => {
     if (!i18n.enabled) return siteTitle;
@@ -120,6 +147,16 @@ export default function Navigation({
       : (item.href === '/'
         ? pathname === '/'
         : pathname.startsWith(item.href));
+
+const getGroupChildren = useCallback(
+  (groupTitle: string) => childrenByParentTitle.get(groupTitle) ?? [],
+  [childrenByParentTitle]
+);
+
+const isGroupActive = useCallback(
+  (groupTitle: string) => getGroupChildren(groupTitle).some((c) => isDesktopItemActive(c)),
+  [getGroupChildren, isDesktopItemActive]
+);
 
   const getDesktopItemHref = (item: SiteConfig['navigation'][number]) =>
     enableOnePageMode ? `/#${item.target}` : item.href;
@@ -217,31 +254,82 @@ export default function Navigation({
                           }}
                         />
                       )}
-                      {effectiveItems.map((item) => {
-                        const isActive = isDesktopItemActive(item);
-                        const href = getDesktopItemHref(item);
 
-                        return (
-                          <Link
-                            key={item.target}
-                            href={href}
-                            data-nav-href={href}
-                            prefetch={true}
-                            onClick={() => enableOnePageMode && setActiveHash(`#${item.target}`)}
-                            onMouseEnter={() => setHoveredHref(href)}
-                            className={cn(
-                              'relative px-3 py-2 text-sm font-medium rounded-lg transition-colors duration-150',
-                              isActive
-                                ? 'text-primary'
-                                : hoveredHref === href
-                                  ? 'text-primary'
-                                  : 'text-neutral-600'
-                            )}
-                          >
-                            {item.title}
-                          </Link>
-                        );
-                      })}
+{topLevelItems.map((item) => {
+  // ✅ GROUP：下拉菜单
+  if (item.type === 'group') {
+    const children = getGroupChildren(item.title);
+    const active = isGroupActive(item.title);
+
+    // 给 indicator 一个“代表 href”（用第一个子页面即可）
+    const groupHref = enableOnePageMode
+      ? (children[0] ? `/#${children[0].target}` : '/')
+      : (children[0]?.href ?? '/');
+
+    return (
+      <Menu key={`group-${item.title}`} as="div" className="relative">
+        <Menu.Button
+          data-nav-href={groupHref}
+          onMouseEnter={() => setHoveredHref(groupHref)}
+          className={cn(
+            'relative px-3 py-2 text-sm font-medium rounded-lg transition-colors duration-150',
+            active ? 'text-primary' : (hoveredHref === groupHref ? 'text-primary' : 'text-neutral-600')
+          )}
+        >
+          {item.title}
+        </Menu.Button>
+
+        <Menu.Items className="absolute left-0 mt-2 w-56 origin-top-left rounded-xl border border-neutral-200/60 bg-background/95 backdrop-blur-xl shadow-lg focus:outline-none">
+          <div className="p-1">
+            {children.map((child) => {
+              const href = getDesktopItemHref(child);
+              const childActive = isDesktopItemActive(child);
+
+              return (
+                <Menu.Item key={`child-${item.title}-${child.target}`}>
+                  {() => (
+                    <Link
+                      href={href}
+                      prefetch={true}
+                      onMouseEnter={() => setHoveredHref(href)}
+                      className={cn(
+                        'block rounded-lg px-3 py-2 text-sm transition-colors',
+                        childActive ? 'text-primary bg-accent/10' : 'text-neutral-700 hover:bg-neutral-100/70'
+                      )}
+                    >
+                      {child.title}
+                    </Link>
+                  )}
+                </Menu.Item>
+              );
+            })}
+          </div>
+        </Menu.Items>
+      </Menu>
+    );
+  }
+
+  // 普通 PAGE：原样
+  const isActive = isDesktopItemActive(item);
+  const href = getDesktopItemHref(item);
+
+  return (
+    <Link
+      key={`page-${item.target}`}
+      href={href}
+      data-nav-href={href}
+      prefetch={true}
+      onClick={() => enableOnePageMode && setActiveHash(`#${item.target}`)}
+      onMouseEnter={() => setHoveredHref(href)}
+      className={cn(
+        'relative px-3 py-2 text-sm font-medium rounded-lg transition-colors duration-150',
+        isActive ? 'text-primary' : hoveredHref === href ? 'text-primary' : 'text-neutral-600'
+      )}
+    >
+      {item.title}
+    </Link>
+  );
+})}
                     </div>
                     <LanguageToggle i18n={i18n} />
                     <ThemeToggle />
@@ -280,42 +368,84 @@ export default function Navigation({
                   className="lg:hidden bg-background/95 backdrop-blur-xl border-b border-neutral-200/50 shadow-lg"
                 >
                   <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                    {effectiveItems.map((item, index) => {
-                      const isActive = enableOnePageMode
-                        ? (item.href === '/' ? pathname === '/' && !activeHash : activeHash === `#${item.target}`)
-                        : (item.href === '/'
-                          ? pathname === '/'
-                          : pathname.startsWith(item.href));
+                  {topLevelItems.map((item, index) => {
+  // ✅ GROUP：手机端用“标题 + 缩进子项”显示（最稳，不会炸）
+  if (item.type === 'group') {
+    const children = getGroupChildren(item.title);
 
-                      const href = enableOnePageMode
-                        ? (item.href === '/' ? '/' : `/#${item.target}`)
-                        : item.href;
+    return (
+      <div key={`m-group-${item.title}`} className="pt-2">
+        <div className="px-3 py-2 text-xs font-semibold tracking-wide text-neutral-500 uppercase">
+          {item.title}
+        </div>
 
-                      return (
-                        <motion.div
-                          key={item.target}
-                          initial={{ opacity: 0, x: -20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: index * 0.1 }}
-                        >
-                          <Disclosure.Button
-                            as={Link}
-                            href={href}
-                            prefetch={true}
-                            onClick={() => enableOnePageMode && setActiveHash(item.href === '/' ? '' : `#${item.target}`)}
-                            className={cn(
-                              'block px-3 py-2 rounded-md text-base font-medium transition-all duration-200',
-                              isActive
-                                ? 'text-primary bg-accent/10 border-l-4 border-accent'
-                                : 'text-neutral-600 hover:text-primary hover:bg-neutral-50'
-                            )}
-                          >
-                            {item.title}
-                          </Disclosure.Button>
-                        </motion.div>
-                      );
-                    })}
-                  </div>
+        {children.map((child) => {
+          const href = enableOnePageMode
+            ? (child.href === '/' ? '/' : `/#${child.target}`)
+            : child.href;
+
+          const isActive = enableOnePageMode
+            ? activeHash === `#${child.target}`
+            : (child.href === '/' ? pathname === '/' : pathname.startsWith(child.href));
+
+          return (
+            <Disclosure.Button
+              key={`m-child-${item.title}-${child.target}`}
+              as={Link}
+              href={href}
+              prefetch={true}
+              onClick={() => enableOnePageMode && setActiveHash(child.href === '/' ? '' : `#${child.target}`)}
+              className={cn(
+                'block px-3 py-2 pl-6 rounded-md text-base font-medium transition-all duration-200',
+                isActive
+                  ? 'text-primary bg-accent/10 border-l-4 border-accent'
+                  : 'text-neutral-600 hover:text-primary hover:bg-neutral-50'
+              )}
+            >
+              {child.title}
+            </Disclosure.Button>
+          );
+        })}
+      </div>
+    );
+  }
+
+  // ✅ 普通 PAGE：保持原来的手机按钮逻辑
+  const isActive = enableOnePageMode
+    ? (item.href === '/' ? pathname === '/' && !activeHash : activeHash === `#${item.target}`)
+    : (item.href === '/'
+      ? pathname === '/'
+      : pathname.startsWith(item.href));
+
+  const href = enableOnePageMode
+    ? (item.href === '/' ? '/' : `/#${item.target}`)
+    : item.href;
+
+  return (
+    <motion.div
+      key={`m-page-${item.target}`}
+      initial={{ opacity: 0, x: -20 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: index * 0.1 }}
+    >
+      <Disclosure.Button
+        as={Link}
+        href={href}
+        prefetch={true}
+        onClick={() => enableOnePageMode && setActiveHash(item.href === '/' ? '' : `#${item.target}`)}
+        className={cn(
+          'block px-3 py-2 rounded-md text-base font-medium transition-all duration-200',
+          isActive
+            ? 'text-primary bg-accent/10 border-l-4 border-accent'
+            : 'text-neutral-600 hover:text-primary hover:bg-neutral-50'
+        )}
+      >
+        {item.title}
+      </Disclosure.Button>
+    </motion.div>
+  );
+})}                   
+ </div>
                 </motion.div>
               </Disclosure.Panel>
             )}

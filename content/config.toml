@@ -1,29 +1,27 @@
 [site]
-title = "Jiale Liu"
-description = "PhD student at the University of Example."
+title = "Jat Laam Yiu"
+description = "Ph.D. Candidate at the CUNY Graduate Center"
 favicon = "/favicon.svg"
-last_updated = "November 18, 2025"
+last_updated = "March 3rd, 2026"
 
 [author]
-name = "Jiale Liu"
-title = "PhD Student"
-institution = "University of Example"
+name = "Jat Laam Yiu"
+title = "Ph.D. Candidate"
+institution = "The Graduate School and University Center, The City University of New York"
 avatar = "/bio.jpg"
 
 [social]
 # Contact information (leave blank or delete to hide)
 
-email = "john.doe@example.com"
-location = "City, Country"
-location_url = "https://maps.google.com"
+email = "yyao1@gradcenter.cuny.edu"
+location = "New York, NY, USA"
+location_url = "https://www.google.com/maps/place/CUNY+Graduate+Center/@40.7486484,-73.9865819,17z/data=!3m1!4b1!4m6!3m5!1s0x89c259a9c13c1245:0x840ad2444314fa08!8m2!3d40.7486484!4d-73.984007!16zL20vMDIzYnht?entry=ttu&g_ep=EgoyMDI2MDMwMi4wIKXMDSoASAFQAw%3D%3D"
 location_details = [
-  "Room 123, Science Building,",
-  "University Avenue, City, Country"
+  "Room 6112.04, The Sociology Department",
+  "365 5th Ave, New York, NY 10016, USA"
 ]
-google_scholar = "https://scholar.google.com"
-orcid = "https://orcid.org"
-github = "https://github.com"
-linkedin = "https://linkedin.com"
+google_scholar = "https://scholar.google.com/citations?user=YcX3OAYAAAAJ&hl=en"
+orcid = "https://orcid.org/0000-0003-3793-3755"
 
 [features]
 # Show a like button on the about page
@@ -33,7 +31,7 @@ enable_likes = true
 enable_one_page_mode = false
 
 [i18n]
-enabled = true
+enabled = false
 locales = ["zh", "en"]
 default_locale = "en"
 # "auto" means the locale will be determined by the browser's language setting, "fixed" means the locale will be fixed to the default locale (but can be switched still, if you want to disable, set "enable=false")
@@ -45,38 +43,68 @@ persist = true
 switcher = true
 
 [i18n.labels]
-zh = "中文"
 en = "English"
+zh = "中文"
 
+#1-About
 [[navigation]]
 title = "About"
 type = "page"
 target = "about"
 href = "/"
 
+#2-Research
+[[navigation]]
+title = "Research"
+type = "group"
+target = "research"
+
 [[navigation]]
 title = "Publications"
 type = "page"
 target = "publications"
 href = "/publications"
+parent = "Research"
 
+[[navigation]]
+title = "Projects"
+type = "page"
+target = "projects"
+href = "/projects"
+parent = "Research"
+
+#[[navigation]]
+#title = "Conference Presentations"
+#type = "page"
+#target = "presentations"
+#href = "/presentations"
+#parent = "Research"
+
+# 3-Teaching
 [[navigation]]
 title = "Teaching"
-type = "page"
+type = "group"
 target = "teaching"
-href = "/teaching"
 
 [[navigation]]
-title = "Awards"
+title = "Courses"
 type = "page"
-target = "awards"
-href = "/awards"
+target = "courses"
+href = "/courses"
+parent = "Teaching"
 
 [[navigation]]
-title = "Services"
+title = "Resources"
 type = "page"
-target = "services"
-href = "/services"
+target = "resources"
+href = "/resources"
+parent = "Teaching"
+
+[[navigation]]
+title = "Life"
+type = "page"
+target = "life"
+href = "/life"
 
 [[navigation]]
 title = "CV"

@@ -1,0 +1,36 @@
+type = "card"
+title = "Life"
+description = "Outside research, a few quiet preferences."
+
+
+
+[[items]]
+title = "🌿 Plants / indoor growing "
+subtitle = "Design → build → iterate"
+date = "Ongoing"
+content = "Small builds around the house—functional, tidy, and always evolving."
+
+
+[[items]]
+title = "🐶 Corgi Field Notes"
+subtitle = "Short legs, long agenda"
+date = "Ongoing"
+content = "Daily walks, behavior observations, and the occasional snow obsession. I love my corgi Doudou. He is the best of the best."
+
+[[items]]
+title = "🥾 Hiking "
+subtitle = "Trying to be consistent"
+date = "Ongoing"
+content = "Less interested in “checking off” summits; more drawn to open terrain, long ridgelines, and the scale of mountains and rivers"
+
+[[items]]
+title = "🍳 Cooking"
+subtitle = "Fieldwork in the kitchen"
+date = "Whenever"
+content = "Food is my argument, memory, and improvisation. (識食物者為俊傑 :> )"
+
+[[items]]
+title = "🚶 Citywalk"
+subtitle = "Public space, everyday life"
+date = "Whenever"
+content = "Walking as a way to think: neighborhoods, storefronts, and social rhythms."

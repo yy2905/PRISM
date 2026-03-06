@@ -40,6 +40,7 @@ function loadDynamicPageData(slug: string, locale?: string): DynamicPageLocaleDa
     };
   }
 
+  // card
   if (pageConfig.type === 'card') {
     return {
       type: 'card',
@@ -47,25 +48,31 @@ function loadDynamicPageData(slug: string, locale?: string): DynamicPageLocaleDa
     };
   }
 
-  return null;
+  // fallback: any unknown type (e.g., "courses", "resources") will render as card
+  return {
+    type: 'card',
+    config: pageConfig as unknown as CardPageConfig,
+  };
+
+
 }
 
 export function generateStaticParams() {
   const config = getConfig();
-  return config.navigation
+
+  const slugs = (config.navigation ?? [])
     .filter((nav) => nav.type === 'page' && nav.target !== 'about')
-    .map((nav) => ({
-      slug: nav.target,
-    }));
+    .map((nav) => String(nav.target).replace(/^\/+/, '')) // ✅ 去掉开头的 /
+    .filter(Boolean);
+
+  return slugs.map((slug) => ({ slug }));
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const { slug } = await params;
-  const pageConfig = getPageConfig(slug) as BasePageConfig | null;
+export async function generateMetadata({ params }: { params: { slug?: string } }): Promise<Metadata> {
+  const slug = String(params?.slug ?? '').replace(/^\/+|\/+$/g, ''); // ✅ 去掉首尾 /
 
-  if (!pageConfig) {
-    return {};
-  }
+  const pageConfig = getPageConfig(slug) as BasePageConfig | null;
+  if (!pageConfig) return {};
 
   return {
     title: pageConfig.title,
@@ -73,8 +80,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
-export default async function DynamicPage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
+
+export default async function DynamicPage({ params }: { params: { slug?: string } }) {
+  const slug = String(params?.slug ?? '').replace(/^\/+|\/+$/g, ''); // ✅ 核心：保证是纯 slug
+
+  if (!slug) notFound();
 
   const baseConfig = getConfig();
   const runtimeI18n = getRuntimeI18nConfig(baseConfig.i18n);
@@ -84,9 +94,7 @@ export default async function DynamicPage({ params }: { params: Promise<{ slug: 
 
   for (const locale of targetLocales) {
     const localizedData = loadDynamicPageData(slug, locale);
-    if (localizedData) {
-      dataByLocale[locale] = localizedData;
-    }
+    if (localizedData) dataByLocale[locale] = localizedData;
   }
 
   const defaultData = loadDynamicPageData(slug);
@@ -94,9 +102,7 @@ export default async function DynamicPage({ params }: { params: Promise<{ slug: 
     dataByLocale[runtimeI18n.defaultLocale] = dataByLocale[runtimeI18n.defaultLocale] || defaultData;
   }
 
-  if (Object.keys(dataByLocale).length === 0) {
-    notFound();
-  }
+  if (Object.keys(dataByLocale).length === 0) notFound();
 
   return <DynamicPageClient dataByLocale={dataByLocale} defaultLocale={runtimeI18n.defaultLocale} />;
 }

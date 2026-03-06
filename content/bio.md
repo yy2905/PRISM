@@ -1,5 +1,10 @@
-I am a PhD student at the School of Science, University of Example, advised by [Prof. Advisor One](https://example.com) and [Dr. Advisor Two](https://example.com).
+Hi, this is Jat Laam (previously publishing as Yinan Yao).
 
-Prior to this, I obtained a BSc degree with First Class Honours in Natural Science from the University of Example.
 
-My current research focuses on investigating the mathematical principles of natural philosophy.
+
+I am a Ph.D. candidate in sociology at the CUNY Graduate Center. My research examines how legal and institutional classifications shape belonging, mobility, and inequality. I study these questions primarily in the context of migration and legal status, while also exploring how work–family arrangements and gendered labor markets structure life chances across the life course.
+
+
+
+Methodologically, I combine quantitative analysis of large-scale data, survey and conjoint experiments, and qualitative interviews to understand how people interpret and respond to institutional categories in everyday life.
+

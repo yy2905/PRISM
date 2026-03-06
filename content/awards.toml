@@ -16,12 +16,12 @@ content = "Description of the award."
 
 [[items]]
 title = "Example Award"
-subtitle = "Organization"
-date = "2023"
-content = "Description of the award."
+subtitle = "CUNY Institute for Demographic Research (CIDR)"
+date = "2024"
+content = "Three-Year Demography Fellowship awarded, ~$30,000 ("
 
 [[items]]
-title = "Example Award"
-subtitle = "Organization"
-date = "2022"
-content = "Description of the award."
+title = "CIDR Supplementary Demography Fellowship"
+subtitle = "CUNY Institute for Demographic Research (CIDR)"
+date = "2023"
+content = "Supplementary demography fellowship awarded, $5,000 (for AY 2023-2024)"

@@ -1,0 +1,53 @@
+type = "card"
+title = "Projects"
+description = "Selected research projects in migration, legal status, and racial inequality."
+
+[[items]]
+title = "Preferred Profiles of New Immigrants to NYC during the Migrant Influx of the 2020s: A Conjoint Experiment Revealing the Role of Legal Status in Public Opinion"
+subtitle = "Conjoint experiment on migrant preferences, PAA 2026 Oral Session (Laam is the presenter)"
+date = "Ongoing"
+content = """
+A collaborative project examining public attitudes toward new migrants in New York City. The study focuses on how legal status, skill level, family status, and perceived deservingness shape evaluations of migrants in a sanctuary-city context.
+"""
+tags = ["Immigration", "Public Opinion", "Conjoint Experiment"]
+
+[[items]]
+title = "A Comparative Analysis of Hate Crimes Against Asians in the USA, 1996–2022"
+subtitle = "Published in the Journal of International Migration and Integration"
+date = "2026"
+content = """
+This project examines long-term patterns in anti-Asian hate crimes in the United States, focusing on how broader political and social contexts shape violence, racialization, and public responses across time.
+"""
+tags = ["Asian Americans", "Hate Crimes", "Historical Sociology"]
+
+
+
+[[items]]
+title = "Intergenerational Support and Racial/Ethnic Disparities in Planning for Retirement"
+subtitle = "PAA 2025 Poster Session"
+date = "2025"
+content = """
+This project examines how patterns of intergenerational support are associated with retirement planning across racial and ethnic groups, with attention to inequality, family structure, and later-life security.
+"""
+tags = ["Demography", "Aging", "Family"]
+
+
+
+[[items]]
+title = "Reframing (Il)legality, Not Values: New Yorkers’ Perceptions of Migrants and Preferences for Asylum Seekers"
+subtitle = "PAA 2026 Poster Session"
+date = "Ongoing"
+content = """
+This project examines how informational cues about migrants’ legal status shape public perceptions and policy attitudes in New York City. Using an embedded experiment in a city-representative survey of 1,250 residents conducted in 2024, the study tests whether clarifying that many recent arrivals are legally present asylum seekers alters perceptions of “illegality” and support for asylum policies. Preliminary findings show that legality clarifications significantly reduce perceived illegality but have no detectable effect on preferences for asylum generosity, suggesting that factual beliefs are more malleable than underlying value-based policy preferences.
+"""
+tags = ["Immigration", "Public Opinion", "Legal Status", "Survey Experiment"]
+
+[[items]]
+title = "The Internal Migration Policies and Skill Selection of Migrant Workers in China – Evidence from the 2014 Hukou Reform"
+date = "Ongoing"
+tags = ["Internal Migration", "Public Policy"]
+
+[[items]]
+title = "The Effects of Internal Migration Policies on Family Co-Residence and Perceived Integration of Migrants in China – Evidence from the 2014 Hukou Reform"
+date = "Ongoing"
+tags = ["Internal Migration", "Public Policy"]

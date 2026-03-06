@@ -1,0 +1,38 @@
+type = "card"
+title = "Resources"
+description = "I approach teaching as an intellectual apprenticeship. Students are trained not only to understand sociological theory, but to think analytically, write clearly, and engage public debates with evidence."
+
+[[items]]
+title = "Syllabus and Course Materials"
+tags = ["Course Design & Innovation"]
+
+[[items.links]]
+label = "Sample syllabus (PDF)"
+href = "/files/syllabus.pdf"
+
+[[items.links]]
+label = "Students SocioCraft Projects (Photos)"
+href = "https://..."
+
+
+[[items]]
+tags = ["Pedagogical Engagement"]
+
+content = """
+My teaching is built through independent course design rather than template delivery. Across multiple semesters, I have developed and refined SOC 1005 (Intro Sociology) from the ground up.
+
+Independent curriculum design  
+SOC 1005 · Intro Sociology (multi-semester development)
+
+Assignment & assessment design  
+Original prompts, grading rubrics, and structured feedback workflow.
+
+Project-based learning  
+“SocioCraft” project integrating sociological concepts with applied analysis.
+
+New course development  
+SOC/ANT/BLS/LTS 3035 · The Remaking of New York: The Immigrant Experience (upcoming).
+
+Institutional resources  
+Course materials are also developed with support from the CUNY Teaching & Learning Center.
+"""
