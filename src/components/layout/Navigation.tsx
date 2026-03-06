@@ -54,7 +54,7 @@ export default function Navigation({
 const { topLevelItems, childrenByParentTitle } = useMemo(() => {
   const map = new Map<string, SiteConfig['navigation'][number][]>();
 
-  const groups = effectiveItems.filter((i) => i.type === 'group');
+  const groups = effectiveItems.filter((i) => i.type === 'section');
   const pages = effectiveItems.filter((i) => i.type === 'page');
 
   groups.forEach((g) => map.set(g.title, []));
@@ -257,7 +257,7 @@ const isGroupActive = useCallback(
 
 {topLevelItems.map((item) => {
   // ✅ GROUP：下拉菜单
-  if (item.type === 'group') {
+  if (item.type === 'section') {
     const children = getGroupChildren(item.title);
     const active = isGroupActive(item.title);
 
@@ -370,7 +370,7 @@ const isGroupActive = useCallback(
                   <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                   {topLevelItems.map((item, index) => {
   // ✅ GROUP：手机端用“标题 + 缩进子项”显示（最稳，不会炸）
-  if (item.type === 'group') {
+  if (item.type === 'section') {
     const children = getGroupChildren(item.title);
 
     return (
