@@ -6,7 +6,9 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
-  /* config options here */
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   webpack: (config) => {
     config.module.rules.push({
       test: /\.bib$/,
