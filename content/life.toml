@@ -8,6 +8,7 @@ description = "Outside research, a few quiet preferences."
 title = "🌿 Plants / indoor growing "
 subtitle = "Design → build → iterate"
 date = "Ongoing"
+image = "/life/plants.jpg"
 content = "Small builds around the house—functional, tidy, and always evolving."
 
 
@@ -15,22 +16,26 @@ content = "Small builds around the house—functional, tidy, and always evolving
 title = "🐶 Corgi Field Notes"
 subtitle = "Short legs, long agenda"
 date = "Ongoing"
+image = "/life/corgi.jpg"
 content = "Daily walks, behavior observations, and the occasional snow obsession. I love my corgi Doudou. He is the best of the best."
 
 [[items]]
 title = "🥾 Hiking "
 subtitle = "Trying to be consistent"
 date = "Ongoing"
+image = "/life/hiking.jpg"
 content = "Less interested in “checking off” summits; more drawn to open terrain, long ridgelines, and the scale of mountains and rivers"
 
 [[items]]
 title = "🍳 Cooking"
 subtitle = "Fieldwork in the kitchen"
 date = "Whenever"
+image = "/life/cooking.jpg"
 content = "Food is my argument, memory, and improvisation. (識食物者為俊傑 :> )"
 
 [[items]]
 title = "🚶 Citywalk"
 subtitle = "Public space, everyday life"
 date = "Whenever"
+image = "/life/citywalk.jpg"
 content = "Walking as a way to think: neighborhoods, storefronts, and social rhythms."

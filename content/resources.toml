@@ -18,21 +18,23 @@ href = "https://..."
 [[items]]
 tags = ["Pedagogical Engagement"]
 
-content = """
-My teaching is built through independent course design rather than template delivery. Across multiple semesters, I have developed and refined SOC 1005 (Intro Sociology) from the ground up.
 
-Independent curriculum design  
+
+content = """
+▸ Independent Curriculum Design
 SOC 1005 · Intro Sociology (multi-semester development)
 
-Assignment & assessment design  
-Original prompts, grading rubrics, and structured feedback workflow.
+▸ Assignment & Assessment Design
+Original prompts, grading rubrics, and structured feedback workflow
 
-Project-based learning  
-“SocioCraft” project integrating sociological concepts with applied analysis.
+▸ Project-based Learning
+“SocioCraft” project integrating sociological concepts with applied analysis
 
-New course development  
-SOC/ANT/BLS/LTS 3035 · The Remaking of New York: The Immigrant Experience (upcoming).
+▸ New Course Development
+SOC/ANT/BLS/LTS 3035 · The Remaking of New York: The Immigrant Experience (upcoming)
 
-Institutional resources  
-Course materials are also developed with support from the CUNY Teaching & Learning Center.
+▸ Institutional Resources
+Course materials are also developed with support from the <a href="https://tlc.commons.gc.cuny.edu/" target="_blank" class="text-blue-500 hover:text-blue-600 hover:underline underline-offset-2">
+CUNY Teaching & Learning Center
+</a>
 """

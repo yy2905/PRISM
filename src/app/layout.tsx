@@ -29,6 +29,53 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
+function NavDropdown({
+  label,
+  labelHref,
+  children,
+}: {
+  label: string;
+  labelHref?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="relative group">
+      {labelHref ? (
+        <Link href={labelHref} className="hover:text-primary transition-colors">
+          {label}
+        </Link>
+      ) : (
+        <button className="hover:text-primary transition-colors">
+          {label}
+        </button>
+      )}
+
+      <div className="absolute left-0 top-full hidden min-w-[220px] pt-2 group-hover:block">
+        <div className="rounded-xl border border-neutral-200 bg-white shadow-lg">
+          <div className="flex flex-col py-2">{children}</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function DropdownLink({
+  href,
+  children,
+}: {
+  href: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <Link
+      href={href}
+      className="px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50 hover:text-primary transition-colors"
+    >
+      {children}
+    </Link>
+  );
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -48,28 +95,25 @@ export default function RootLayout({
               {config.site.title}
             </Link>
 
-            <nav className="flex items-center gap-6 text-sm font-medium text-neutral-700">
+            <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-neutral-700">
               <Link href="/" className="hover:text-primary transition-colors">
                 About
               </Link>
-              <Link href="/publications" className="hover:text-primary transition-colors">
-                Publications
-              </Link>
-              <Link href="/projects" className="hover:text-primary transition-colors">
-                Projects
-              </Link>
-              <Link href="/teaching" className="hover:text-primary transition-colors">
-                Teaching
-              </Link>
-              <Link href="/courses" className="hover:text-primary transition-colors">
-                Courses
-              </Link>
-              <Link href="/resources" className="hover:text-primary transition-colors">
-                Resources
-              </Link>
+
+              <NavDropdown label="Research">
+                <DropdownLink href="/publications">Publications</DropdownLink>
+                <DropdownLink href="/projects">Projects</DropdownLink>
+              </NavDropdown>
+
+              <NavDropdown label="Teaching">
+  	        <DropdownLink href="/courses">Courses</DropdownLink>
+  	        <DropdownLink href="/resources">Resources</DropdownLink>
+	      </NavDropdown>
+
               <Link href="/life" className="hover:text-primary transition-colors">
                 Life
               </Link>
+
               <Link href="/cv" className="hover:text-primary transition-colors">
                 CV
               </Link>
@@ -77,9 +121,7 @@ export default function RootLayout({
           </div>
         </header>
 
-        <main className="min-h-screen pt-24">
-          {children}
-        </main>
+        <main className="min-h-screen pt-24">{children}</main>
       </body>
     </html>
   );

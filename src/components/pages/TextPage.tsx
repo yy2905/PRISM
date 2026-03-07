@@ -27,9 +27,13 @@ export default function TextPage({ config, content, embedded = false }: TextPage
             <div className="text-neutral-700 dark:text-neutral-600 leading-relaxed">
                 <ReactMarkdown
                     components={{
-                        h1: ({ children }) => <h1 className="text-3xl font-serif font-bold text-primary mt-8 mb-4">{children}</h1>,
-                        h2: ({ children }) => <h2 className="text-2xl font-serif font-bold text-primary mt-8 mb-4 border-b border-neutral-200 dark:border-neutral-800 pb-2">{children}</h2>,
-                        h3: ({ children }) => <h3 className="text-xl font-semibold text-primary mt-6 mb-3">{children}</h3>,
+                        h1: ({ children }) => <h1 className="text-3xl font-serif font-bold text-emerald-900 mt-8 mb-4">{children}</h1>,
+			h2: ({ children }) => (
+  <h2 className="text-2xl font-serif font-bold text-emerald-900 mt-10 mb-6 pl-4 border-l-4 border-emerald-700">
+    {children}
+  </h2>
+),
+			h3: ({ children }) => <h3 className="text-xl font-semibold text-neutral-800 mt-6 mb-3">{children}</h3>,
                         p: ({ children }) => <p className="mb-4 last:mb-0">{children}</p>,
                         ul: ({ children }) => <ul className="list-disc list-inside mb-4 space-y-1 ml-4">{children}</ul>,
                         ol: ({ children }) => <ol className="list-decimal list-inside mb-4 space-y-1 ml-4">{children}</ol>,

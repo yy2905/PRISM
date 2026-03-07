@@ -21,16 +21,21 @@ export default function SelectedPublications({ publications, title, enableOnePag
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
         >
-            <div className="flex items-center justify-between mb-4">
-                <h2 className="text-2xl font-serif font-bold text-primary">{resolvedTitle}</h2>
-                <Link
-                    href={enableOnePageMode ? "/#publications" : "/publications"}
-                    prefetch={true}
-                    className="text-accent hover:text-accent-dark text-sm font-medium transition-all duration-200 rounded hover:bg-accent/10 hover:shadow-sm"
-                >
-                    {messages.home.viewAll} →
-                </Link>
-            </div>
+            <div className="flex items-center justify-between mb-0.5">
+    <h2 className="text-2xl font-serif font-bold text-primary">
+        {resolvedTitle}
+    </h2>
+
+    <Link
+        href={enableOnePageMode ? "/#publications" : "/publications"}
+        prefetch={true}
+        className="text-accent hover:text-accent-dark text-sm font-medium transition-all duration-200"
+    >
+        {messages.home.viewAll} →
+    </Link>
+</div>
+
+<div className="w-66.5 h-[2px] bg-accent mb-6 rounded"></div>
             <div className="space-y-4">
                 {publications.map((pub, index) => (
                     <motion.div

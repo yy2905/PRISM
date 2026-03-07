@@ -304,16 +304,18 @@ export default function Profile({ author, social, features, researchInterests }:
             </div>
 
             {/* Research Interests */}
-            {researchInterests && researchInterests.length > 0 && (
-                <div className="bg-neutral-100 dark:bg-neutral-800 rounded-lg p-4 mb-6 hover:shadow-lg transition-all duration-200 hover:scale-[1.02]">
-                    <h3 className="font-semibold text-primary mb-3">{messages.profile.researchInterests}</h3>
-                    <div className="space-y-2 text-sm text-neutral-700 dark:text-neutral-500">
-                        {researchInterests.map((interest, index) => (
-                            <div key={index}>{interest}</div>
-                        ))}
-                    </div>
-                </div>
-            )}
+{researchInterests && researchInterests.length > 0 && (
+    <div className="bg-neutral-100 dark:bg-neutral-800 rounded-lg p-4 mb-6 hover:shadow-lg transition-all duration-200 hover:scale-[1.02]">
+        <h3 className="font-semibold text-accent mb-3">
+            {messages.profile.researchInterests}
+        </h3>
+        <div className="space-y-2 text-sm text-neutral-700 dark:text-neutral-500">
+            {researchInterests.map((interest, index) => (
+                <div key={index}>{interest}</div>
+            ))}
+        </div>
+    </div>
+)}
 
             {/* Like Button */}
             {features.enable_likes && (
