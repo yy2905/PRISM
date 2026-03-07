@@ -9,7 +9,6 @@ type TermSeason = 'Winter' | 'Spring' | 'Summer' | 'Fall';
 function parseTerm(dateStr?: string): { season: TermSeason; year: number } | null {
   if (!dateStr) return null;
 
-  // Match: "Spring 2026", "Fall 2025", etc.
   const m = dateStr.trim().match(/^(Winter|Spring|Summer|Fall)\s+(\d{4})$/i);
   if (!m) return null;
 
@@ -20,7 +19,6 @@ function parseTerm(dateStr?: string): { season: TermSeason; year: number } | nul
   return { season, year };
 }
 
-// For ordering terms within/between groups
 function termKey(season: TermSeason, year: number) {
   const seasonOrder: Record<TermSeason, number> = {
     Winter: 0,
@@ -31,14 +29,11 @@ function termKey(season: TermSeason, year: number) {
   return year * 10 + seasonOrder[season];
 }
 
-// Approx "current term" based on today's month
 function currentTermKeyToday() {
   const now = new Date();
   const year = now.getFullYear();
-  const month = now.getMonth() + 1; // 1-12
+  const month = now.getMonth() + 1;
 
-  // Rough academic seasons:
-  // Winter: 12-2, Spring: 3-5, Summer: 6-8, Fall: 9-11
   let season: TermSeason = 'Spring';
   if (month === 12 || month === 1 || month === 2) season = 'Winter';
   else if (month >= 3 && month <= 5) season = 'Spring';
@@ -48,42 +43,8 @@ function currentTermKeyToday() {
   return termKey(season, year);
 }
 
-/**
- * Optional: add a colored badge when item.content starts with:
- * "Article published: ..." / "Presentation: ..." etc.
- *
- * If it doesn't match a known label, it returns the raw string unchanged.
- */
-function renderNewsContent(raw: string): ReactNode {
-  const m = raw.match(/^([^:]{3,40}):\s*(.*)$/);
-  if (!m) return raw;
-
-  const label = m[1].trim();
-  const rest = m[2];
-
-  const badgeMap: Record<string, string> = {
-    'Article published': 'bg-blue-700 text-white',
-    Presentation: 'bg-emerald-700 text-white',
-    'Poster presentation': 'bg-emerald-700 text-white',
-    Awarded: 'bg-violet-700 text-white',
-    Appointed: 'bg-amber-700 text-white',
-    Served: 'bg-slate-700 text-white',
-    Completed: 'bg-slate-700 text-white',
-  };
-
-  const cls = badgeMap[label];
-  if (!cls) return raw;
-
-  return (
-    <>
-      <span
-        className={`inline-flex items-center rounded-md px-2 py-0.5 text-xs font-semibold mr-2 align-middle ${cls}`}
-      >
-        {label}
-      </span>
-      <span>{rest}</span>
-    </>
-  );
+function isSemesterLine(line: string): boolean {
+  return /^(Winter|Spring|Summer|Fall)\s+\d{4}$/i.test(line.trim());
 }
 
 function SectionTitle({ children }: { children: ReactNode }) {
@@ -97,10 +58,17 @@ function SectionTitle({ children }: { children: ReactNode }) {
   );
 }
 
-export default function CardPage({ config, embedded = false }: { config: CardPageConfig; embedded?: boolean }) {
+export default function CardPage({
+  config,
+  embedded = false,
+}: {
+  config: CardPageConfig;
+  embedded?: boolean;
+}) {
   const todayKey = useMemo(() => currentTermKeyToday(), []);
+  const isLifePage = config.title === 'Life';
+  const isProjectsPage = config.title === 'Projects';
 
-  // 1) Term grouping (for courses-like pages)
   const grouping = useMemo(() => {
     const items = config.items ?? [];
     const parsed = items.map((item, idx) => {
@@ -126,17 +94,12 @@ export default function CardPage({ config, embedded = false }: { config: CardPag
       else past.push(x);
     });
 
-    // Sort:
-    // - current: keep original order
-    // - incoming: soonest first (ascending)
-    // - past: most recent first (descending)
     incoming.sort((a, b) => (a.key! - b.key!) || (a.idx - b.idx));
     past.sort((a, b) => (b.key! - a.key!) || (a.idx - b.idx));
 
     return { current, incoming, past, unknown };
   }, [config.items, todayKey]);
 
-  // 2) Tag grouping (for Resources-like pages): use item.tags[0] as category
   const tagGrouping = useMemo(() => {
     const items = config.items ?? [];
 
@@ -147,10 +110,8 @@ export default function CardPage({ config, embedded = false }: { config: CardPag
       groups.get(group)!.push(item);
     }
 
-    // If only one group, don't group (keep original grid)
     if (groups.size <= 1) return null;
 
-    // Optional: customize category order
     const preferredOrder = ['Teaching', 'Methods', 'Resources', 'Tools', 'Other'];
     const sortedKeys = Array.from(groups.keys()).sort((a, b) => {
       const ia = preferredOrder.indexOf(a);
@@ -164,68 +125,189 @@ export default function CardPage({ config, embedded = false }: { config: CardPag
     return sortedKeys.map((key) => ({ key, items: groups.get(key)! }));
   }, [config.items]);
 
+  const renderItemContent = (item: any) => {
+    if (!item.content) return null;
+
+    if (isProjectsPage) {
+      return (
+        <p
+          className={`${
+            embedded ? 'text-sm' : 'text-base'
+          } text-neutral-700 dark:text-neutral-400 leading-8`}
+        >
+          {item.content}
+        </p>
+      );
+    }
+
+    return (
+      <div
+        className={`${
+          embedded ? 'text-sm' : 'text-base'
+        } text-neutral-600 dark:text-neutral-500 leading-relaxed`}
+      >
+        {item.content.split(/\r?\n\r?\n/).map((block: string, blockIndex: number) => {
+          const lines = block
+            .split(/\r?\n/)
+            .map((line) => line.trim())
+            .filter(Boolean);
+
+          if (lines.length === 0) return null;
+
+          const [firstLine, ...restLines] = lines;
+          const semesterLine = isSemesterLine(firstLine);
+
+          if (semesterLine) {
+            return (
+              <div key={blockIndex} className="mb-4 last:mb-0 flex items-center gap-3">
+                <span className="text-accent font-bold text-lg leading-none">▍</span>
+                <span className="font-semibold text-primary">{firstLine}</span>
+              </div>
+            );
+          }
+
+          return (
+            <div key={blockIndex} className="mb-4 last:mb-0">
+              <div className="font-semibold text-primary">{firstLine}</div>
+              {restLines.length > 0 && (
+                <div
+                  className="mt-1 whitespace-pre-line"
+                  dangerouslySetInnerHTML={{ __html: restLines.join('<br/>') }}
+                />
+              )}
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+
   const renderItem = (item: any, index: number) => (
     <motion.div
       key={`${item.title}-${index}`}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: 0.06 * index }}
-      className={`bg-white dark:bg-neutral-900 ${embedded ? 'p-4' : 'p-6'} rounded-xl shadow-sm border border-neutral-200 dark:border-neutral-800 hover:shadow-lg transition-all duration-200 hover:scale-[1.01]`}
+      className={
+        isLifePage
+          ? `group relative overflow-hidden bg-white dark:bg-neutral-900 ${
+              embedded ? 'p-4' : 'p-5'
+            } rounded-2xl shadow-sm border border-neutral-200 dark:border-neutral-800 hover:shadow-xl transition-all duration-300 hover:-translate-y-1`
+          : `bg-white dark:bg-neutral-900 ${
+              embedded ? 'p-4' : 'p-6'
+            } rounded-xl shadow-sm border border-neutral-200 dark:border-neutral-800 hover:shadow-lg transition-all duration-200 hover:scale-[1.01]`
+      }
     >
-      <div className="flex justify-between items-start mb-2">
-        <h3 className={`${embedded ? 'text-lg' : 'text-xl'} font-semibold text-primary`}>{item.title}</h3>
-        {item.date && (
-          <span className="text-sm text-neutral-500 font-medium bg-neutral-100 dark:bg-neutral-800 px-2 py-1 rounded">
-            {item.date}
-          </span>
-        )}
-      </div>
+      {isLifePage ? (
+        <div className="grid md:grid-cols-[140px_1fr] gap-5 items-start">
+          {item.image && (
+            <div className="aspect-square w-full overflow-hidden rounded-2xl bg-neutral-100 border border-neutral-200">
+              <img
+                src={item.image}
+                alt={item.title || 'Life image'}
+                className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.04]"
+              />
+            </div>
+          )}
 
-      {item.subtitle && (
-        <p className={`${embedded ? 'text-sm' : 'text-base'} text-accent font-medium mb-3`}>{item.subtitle}</p>
-      )}
+          <div className="min-w-0">
+            <div className="flex justify-between items-start gap-4 mb-2">
+              <h3
+                className={`${
+                  embedded ? 'text-lg' : 'text-2xl'
+                } font-semibold text-primary leading-tight`}
+              >
+                {item.title}
+              </h3>
 
-      {item.content && (
-<p className={`${embedded ? 'text-sm' : 'text-base'} text-neutral-600 dark:text-neutral-500 leading-relaxed whitespace-pre-line`}>
-  {renderNewsContent(item.content)}
-</p>
-      )}
+              {item.date && (
+                <span className="text-sm text-neutral-500 font-medium bg-neutral-100 dark:bg-neutral-800 px-3 py-1 rounded-xl shrink-0">
+                  {item.date}
+                </span>
+              )}
+            </div>
 
-      {item.links && Array.isArray(item.links) && item.links.length > 0 && (
-        <div className="mt-4 space-y-2">
-          {item.links.map((l: any) => (
-            <a
-              key={l.href}
-              href={l.href}
-              target={l.href?.startsWith('http') ? '_blank' : undefined}
-              rel={l.href?.startsWith('http') ? 'noopener noreferrer' : undefined}
-              className="block text-sm text-accent font-medium hover:underline transition-colors"
-            >
-              {l.label}
-            </a>
-          ))}
+            {item.subtitle && (
+              <p className={`${embedded ? 'text-sm' : 'text-lg'} text-accent font-medium mb-3`}>
+                {item.subtitle}
+              </p>
+            )}
+
+            {item.content && (
+              <p
+                className={`${
+                  embedded ? 'text-sm' : 'text-base'
+                } text-neutral-700 dark:text-neutral-400 leading-8`}
+              >
+                {item.content}
+              </p>
+            )}
+          </div>
         </div>
-      )}
+      ) : (
+        <>
+          <div className="flex justify-between items-start mb-2">
+            <h3 className={`${embedded ? 'text-lg' : 'text-xl'} font-semibold text-primary`}>
+              {item.title}
+            </h3>
+            {item.date && (
+              <span className="text-sm text-neutral-500 font-medium bg-neutral-100 dark:bg-neutral-800 px-2 py-1 rounded">
+                {item.date}
+              </span>
+            )}
+          </div>
 
-      {item.tags && (
-        <div className="flex flex-wrap gap-2 mt-4">
-          {item.tags.map((tag: string) => (
-            <span
-              key={tag}
-              className="text-xs text-neutral-500 bg-neutral-50 dark:bg-neutral-800/50 px-2 py-1 rounded border border-neutral-100 dark:border-neutral-800"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
+          {item.subtitle && (
+            <p className={`${embedded ? 'text-sm' : 'text-base'} text-accent font-medium mb-3`}>
+              {item.subtitle}
+            </p>
+          )}
+
+          {renderItemContent(item)}
+
+          {item.links && Array.isArray(item.links) && item.links.length > 0 && (
+            <div className="mt-4 space-y-2">
+              {item.links.map((l: any) => (
+                <a
+                  key={l.href}
+                  href={l.href}
+                  target={l.href?.startsWith('http') ? '_blank' : undefined}
+                  rel={l.href?.startsWith('http') ? 'noopener noreferrer' : undefined}
+                  className="block text-sm text-accent font-medium hover:underline transition-colors"
+                >
+                  {l.label}
+                </a>
+              ))}
+            </div>
+          )}
+
+          {item.tags && (
+            <div className="flex flex-wrap gap-2 mt-4">
+              {item.tags.map((tag: string) => (
+                <span
+                  key={tag}
+                  className="text-xs text-neutral-500 bg-neutral-50 dark:bg-neutral-800/50 px-2 py-1 rounded border border-neutral-100 dark:border-neutral-800"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
+        </>
       )}
     </motion.div>
   );
 
   return (
-    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.4 }}>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, delay: 0.4 }}
+    >
       <div className={embedded ? 'mb-4' : 'mb-8'}>
-        <h1 className={`${embedded ? 'text-2xl' : 'text-4xl'} font-serif font-bold text-primary mb-4`}>{config.title}</h1>
+        <h1 className={`${embedded ? 'text-2xl' : 'text-4xl'} font-serif font-bold text-primary mb-4`}>
+          {config.title}
+        </h1>
         {config.description && (
           <p className={`${embedded ? 'text-base' : 'text-lg'} text-neutral-600 dark:text-neutral-500 max-w-2xl`}>
             {config.description}
@@ -233,11 +315,6 @@ export default function CardPage({ config, embedded = false }: { config: CardPag
         )}
       </div>
 
-      {/* Priority:
-          1) term grouping (courses)
-          2) tag grouping (resources)
-          3) default grid
-      */}
       {grouping ? (
         <div>
           {grouping.current.length > 0 && (
