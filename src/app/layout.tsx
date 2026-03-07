@@ -31,24 +31,16 @@ export async function generateMetadata(): Promise<Metadata> {
 
 function NavDropdown({
   label,
-  labelHref,
   children,
 }: {
   label: string;
-  labelHref?: string;
   children: React.ReactNode;
 }) {
   return (
     <div className="relative group">
-      {labelHref ? (
-        <Link href={labelHref} className="hover:text-primary transition-colors">
-          {label}
-        </Link>
-      ) : (
-        <button className="hover:text-primary transition-colors">
-          {label}
-        </button>
-      )}
+      <button className="hover:text-primary transition-colors">
+        {label}
+      </button>
 
       <div className="absolute left-0 top-full hidden min-w-[220px] pt-2 group-hover:block">
         <div className="rounded-xl border border-neutral-200 bg-white shadow-lg">
@@ -73,6 +65,58 @@ function DropdownLink({
     >
       {children}
     </Link>
+  );
+}
+
+function MobileMenu() {
+  return (
+    <details className="md:hidden relative">
+      <summary className="list-none cursor-pointer select-none rounded-lg border border-neutral-200 px-3 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50">
+        Menu
+      </summary>
+
+      <div className="absolute right-0 mt-2 w-64 rounded-xl border border-neutral-200 bg-white shadow-lg p-3 space-y-3">
+        <Link href="/" className="block text-sm font-medium text-neutral-800 hover:text-primary">
+          About
+        </Link>
+
+        <div>
+          <div className="text-xs uppercase tracking-[0.14em] text-neutral-500 mb-2">
+            Research
+          </div>
+          <div className="space-y-2 pl-3">
+            <Link href="/publications" className="block text-sm text-neutral-700 hover:text-primary">
+              Publications
+            </Link>
+            <Link href="/projects" className="block text-sm text-neutral-700 hover:text-primary">
+              Projects
+            </Link>
+          </div>
+        </div>
+
+        <div>
+          <div className="text-xs uppercase tracking-[0.14em] text-neutral-500 mb-2">
+            Teaching
+          </div>
+          <div className="space-y-2 pl-3">
+            <Link href="/courses" className="block text-sm text-neutral-700 hover:text-primary">
+              Courses
+            </Link>
+            <Link href="/resources" className="block text-sm text-neutral-700 hover:text-primary">
+              Resources
+            </Link>
+          </div>
+        </div>
+
+        <Link href="/life" className="block text-sm font-medium text-neutral-800 hover:text-primary">
+          Life
+        </Link>
+
+        <Link href="/cv" className="block text-sm font-medium text-neutral-800 hover:text-primary">
+          CV
+        </Link>
+      </div>
+    </details>
   );
 }
 
@@ -106,9 +150,9 @@ export default function RootLayout({
               </NavDropdown>
 
               <NavDropdown label="Teaching">
-  	        <DropdownLink href="/courses">Courses</DropdownLink>
-  	        <DropdownLink href="/resources">Resources</DropdownLink>
-	      </NavDropdown>
+                <DropdownLink href="/courses">Courses</DropdownLink>
+                <DropdownLink href="/resources">Resources</DropdownLink>
+              </NavDropdown>
 
               <Link href="/life" className="hover:text-primary transition-colors">
                 Life
@@ -118,6 +162,8 @@ export default function RootLayout({
                 CV
               </Link>
             </nav>
+
+            <MobileMenu />
           </div>
         </header>
 
