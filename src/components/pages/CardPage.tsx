@@ -141,11 +141,12 @@ export default function CardPage({
     }
 
     return (
-      <div
-        className={`${
-          embedded ? 'text-sm' : 'text-base'
-        } text-neutral-600 dark:text-neutral-500 leading-relaxed`}
-      >
+  <div
+    className={`${
+      embedded ? 'text-sm' : 'text-base'
+    } text-neutral-600 dark:text-neutral-500 leading-8 font-normal`}
+  >
+
         {item.content.split(/\r?\n\r?\n/).map((block: string, blockIndex: number) => {
           const lines = block
             .split(/\r?\n/)
@@ -168,7 +169,7 @@ export default function CardPage({
 
           return (
             <div key={blockIndex} className="mb-4 last:mb-0">
-              <div className="font-semibold text-primary">{firstLine}</div>
+              <div className="font-normal text-neutral-600 dark:text-neutral-500">{firstLine}</div>
               {restLines.length > 0 && (
                 <div
                   className="mt-1 whitespace-pre-line"

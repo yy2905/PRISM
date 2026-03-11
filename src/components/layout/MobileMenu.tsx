@@ -118,6 +118,16 @@ export default function MobileMenu() {
             >
               Resources
             </Link>
+
+            <a
+              href="https://yy2905.github.io/teaching/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block text-sm text-neutral-700 hover:text-primary"
+              onClick={() => setOpen(false)}
+            >
+              Teaching Site
+            </a>
           </div>
         </div>
 

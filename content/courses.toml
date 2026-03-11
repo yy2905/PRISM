@@ -1,6 +1,11 @@
 type = "card"
 title = "Courses"
-description = "I served as a Graduate Teaching Fellow in Fall 2023 and Spring 2024, and I currently serve as an Adjunct Lecturer (Spring 2025–Present) in the Department of Sociology and Anthropology at CUNY Baruch College. A semester-by-semester record of courses taught is listed below. Public course materials are available for the current term only."
+
+description = """
+I served as a Graduate Teaching Fellow in Fall 2023 and Spring 2024 and currently serve as an Adjunct Lecturer (Spring 2025–Present) in the Department of Sociology and Anthropology at CUNY Baruch College. A semester-by-semester record of courses taught is listed below.
+
+Additional course materials and teaching resources are available on my Teaching Site (accessible via the Teaching menu).
+"""
 
 [[items]]
 title = "SOC 1005 · Intro Sociology (4:10–5:25 PM; 5:50–7:05 PM)"

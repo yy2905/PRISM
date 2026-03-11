@@ -55,15 +55,30 @@ function NavDropdown({
 function DropdownLink({
   href,
   children,
+  external = false,
 }: {
   href: string;
   children: React.ReactNode;
+  external?: boolean;
 }) {
+  const className =
+    "px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50 hover:text-primary transition-colors";
+
+  if (external) {
+    return (
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={className}
+      >
+        {children}
+      </a>
+    );
+  }
+
   return (
-    <Link
-      href={href}
-      className="px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50 hover:text-primary transition-colors"
-    >
+    <Link href={href} className={className}>
       {children}
     </Link>
   );
@@ -109,10 +124,13 @@ export default function RootLayout({
                 <DropdownLink href="/projects">Projects</DropdownLink>
               </NavDropdown>
 
-              <NavDropdown label="Teaching">
-                <DropdownLink href="/courses">Courses</DropdownLink>
-                <DropdownLink href="/resources">Resources</DropdownLink>
-              </NavDropdown>
+<NavDropdown label="Teaching">
+  <DropdownLink href="/courses">Courses</DropdownLink>
+  <DropdownLink href="/resources">Resources</DropdownLink>
+  <DropdownLink href="https://yy2905.github.io/teaching/" external>
+    Teaching Site
+  </DropdownLink>
+</NavDropdown>
 
               <Link
                 href="/life"

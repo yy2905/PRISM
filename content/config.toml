@@ -23,6 +23,8 @@ location_details = [
 google_scholar = "https://scholar.google.com/citations?user=YcX3OAYAAAAJ&hl=en"
 orcid = "https://orcid.org/0000-0003-3793-3755"
 
+github = "https://github.com/yy2905"
+
 [features]
 # Show a like button on the about page
 enable_likes = true
