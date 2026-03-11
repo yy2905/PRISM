@@ -50,10 +50,10 @@ function isSemesterLine(line: string): boolean {
 function SectionTitle({ children }: { children: ReactNode }) {
   return (
     <div className="mt-10 first:mt-0">
-      <div className="text-xs tracking-[0.18em] uppercase text-neutral-500 dark:text-neutral-500 mb-4">
+      <div className="mb-4 text-xs uppercase tracking-[0.18em] text-neutral-500 dark:text-neutral-500">
         {children}
       </div>
-      <div className="h-px bg-neutral-200 dark:bg-neutral-800 mb-6" />
+      <div className="mb-6 h-px bg-neutral-200 dark:bg-neutral-800" />
     </div>
   );
 }
@@ -133,7 +133,7 @@ export default function CardPage({
         <p
           className={`${
             embedded ? 'text-sm' : 'text-base'
-          } text-neutral-700 dark:text-neutral-400 leading-8`}
+          } leading-8 text-neutral-700 dark:text-neutral-400`}
         >
           {item.content}
         </p>
@@ -141,12 +141,11 @@ export default function CardPage({
     }
 
     return (
-  <div
-    className={`${
-      embedded ? 'text-sm' : 'text-base'
-    } text-neutral-600 dark:text-neutral-500 leading-8 font-normal`}
-  >
-
+      <div
+        className={`${
+          embedded ? 'text-sm' : 'text-base'
+        } font-normal leading-8 text-neutral-600 dark:text-neutral-500`}
+      >
         {item.content.split(/\r?\n\r?\n/).map((block: string, blockIndex: number) => {
           const lines = block
             .split(/\r?\n/)
@@ -160,8 +159,8 @@ export default function CardPage({
 
           if (semesterLine) {
             return (
-              <div key={blockIndex} className="mb-4 last:mb-0 flex items-center gap-3">
-                <span className="text-accent font-bold text-lg leading-none">▍</span>
+              <div key={blockIndex} className="mb-4 flex items-center gap-3 last:mb-0">
+                <span className="text-lg font-bold leading-none text-accent">▍</span>
                 <span className="font-semibold text-primary">{firstLine}</span>
               </div>
             );
@@ -169,10 +168,13 @@ export default function CardPage({
 
           return (
             <div key={blockIndex} className="mb-4 last:mb-0">
-              <div className="font-normal text-neutral-600 dark:text-neutral-500">{firstLine}</div>
+              <div className="font-normal text-neutral-600 dark:text-neutral-500">
+                {firstLine}
+              </div>
+
               {restLines.length > 0 && (
                 <div
-                  className="mt-1 whitespace-pre-line"
+                  className="mt-1 whitespace-pre-line font-normal text-neutral-600 dark:text-neutral-500"
                   dangerouslySetInnerHTML={{ __html: restLines.join('<br/>') }}
                 />
               )}
@@ -191,18 +193,18 @@ export default function CardPage({
       transition={{ duration: 0.4, delay: 0.06 * index }}
       className={
         isLifePage
-          ? `group relative overflow-hidden bg-white dark:bg-neutral-900 ${
+          ? `group relative overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:border-neutral-800 dark:bg-neutral-900 ${
               embedded ? 'p-4' : 'p-5'
-            } rounded-2xl shadow-sm border border-neutral-200 dark:border-neutral-800 hover:shadow-xl transition-all duration-300 hover:-translate-y-1`
-          : `bg-white dark:bg-neutral-900 ${
+            }`
+          : `rounded-xl border border-neutral-200 bg-white shadow-sm transition-all duration-200 hover:scale-[1.01] hover:shadow-lg dark:border-neutral-800 dark:bg-neutral-900 ${
               embedded ? 'p-4' : 'p-6'
-            } rounded-xl shadow-sm border border-neutral-200 dark:border-neutral-800 hover:shadow-lg transition-all duration-200 hover:scale-[1.01]`
+            }`
       }
     >
       {isLifePage ? (
-        <div className="grid md:grid-cols-[140px_1fr] gap-5 items-start">
+        <div className="grid items-start gap-5 md:grid-cols-[140px_1fr]">
           {item.image && (
-            <div className="aspect-square w-full overflow-hidden rounded-2xl bg-neutral-100 border border-neutral-200">
+            <div className="aspect-square w-full overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-100">
               <img
                 src={item.image}
                 alt={item.title || 'Life image'}
@@ -212,24 +214,24 @@ export default function CardPage({
           )}
 
           <div className="min-w-0">
-            <div className="flex justify-between items-start gap-4 mb-2">
+            <div className="mb-2 flex items-start justify-between gap-4">
               <h3
                 className={`${
                   embedded ? 'text-lg' : 'text-2xl'
-                } font-semibold text-primary leading-tight`}
+                } leading-tight font-semibold text-primary`}
               >
                 {item.title}
               </h3>
 
               {item.date && (
-                <span className="text-sm text-neutral-500 font-medium bg-neutral-100 dark:bg-neutral-800 px-3 py-1 rounded-xl shrink-0">
+                <span className="shrink-0 rounded-xl bg-neutral-100 px-3 py-1 text-sm font-medium text-neutral-500 dark:bg-neutral-800">
                   {item.date}
                 </span>
               )}
             </div>
 
             {item.subtitle && (
-              <p className={`${embedded ? 'text-sm' : 'text-lg'} text-accent font-medium mb-3`}>
+              <p className={`${embedded ? 'text-sm' : 'text-lg'} mb-3 font-medium text-accent`}>
                 {item.subtitle}
               </p>
             )}
@@ -238,7 +240,7 @@ export default function CardPage({
               <p
                 className={`${
                   embedded ? 'text-sm' : 'text-base'
-                } text-neutral-700 dark:text-neutral-400 leading-8`}
+                } leading-8 text-neutral-700 dark:text-neutral-400`}
               >
                 {item.content}
               </p>
@@ -247,19 +249,20 @@ export default function CardPage({
         </div>
       ) : (
         <>
-          <div className="flex justify-between items-start mb-2">
+          <div className="mb-2 flex items-start justify-between">
             <h3 className={`${embedded ? 'text-lg' : 'text-xl'} font-semibold text-primary`}>
               {item.title}
             </h3>
+
             {item.date && (
-              <span className="text-sm text-neutral-500 font-medium bg-neutral-100 dark:bg-neutral-800 px-2 py-1 rounded">
+              <span className="rounded bg-neutral-100 px-2 py-1 text-sm font-medium text-neutral-500 dark:bg-neutral-800">
                 {item.date}
               </span>
             )}
           </div>
 
           {item.subtitle && (
-            <p className={`${embedded ? 'text-sm' : 'text-base'} text-accent font-medium mb-3`}>
+            <p className={`${embedded ? 'text-sm' : 'text-base'} mb-3 font-medium text-accent`}>
               {item.subtitle}
             </p>
           )}
@@ -274,7 +277,7 @@ export default function CardPage({
                   href={l.href}
                   target={l.href?.startsWith('http') ? '_blank' : undefined}
                   rel={l.href?.startsWith('http') ? 'noopener noreferrer' : undefined}
-                  className="block text-sm text-accent font-medium hover:underline transition-colors"
+                  className="block text-sm font-medium text-accent transition-colors hover:underline"
                 >
                   {l.label}
                 </a>
@@ -283,11 +286,11 @@ export default function CardPage({
           )}
 
           {item.tags && (
-            <div className="flex flex-wrap gap-2 mt-4">
+            <div className="mt-4 flex flex-wrap gap-2">
               {item.tags.map((tag: string) => (
                 <span
                   key={tag}
-                  className="text-xs text-neutral-500 bg-neutral-50 dark:bg-neutral-800/50 px-2 py-1 rounded border border-neutral-100 dark:border-neutral-800"
+                  className="rounded border border-neutral-100 bg-neutral-50 px-2 py-1 text-xs text-neutral-500 dark:border-neutral-800 dark:bg-neutral-800/50"
                 >
                   {tag}
                 </span>
@@ -306,11 +309,16 @@ export default function CardPage({
       transition={{ duration: 0.6, delay: 0.4 }}
     >
       <div className={embedded ? 'mb-4' : 'mb-8'}>
-        <h1 className={`${embedded ? 'text-2xl' : 'text-4xl'} font-serif font-bold text-primary mb-4`}>
+        <h1 className={`${embedded ? 'text-2xl' : 'text-4xl'} mb-4 font-serif font-bold text-primary`}>
           {config.title}
         </h1>
+
         {config.description && (
-          <p className={`${embedded ? 'text-base' : 'text-lg'} text-neutral-600 dark:text-neutral-500 max-w-2xl`}>
+          <p
+            className={`${
+              embedded ? 'text-base' : 'text-lg'
+            } max-w-2xl text-neutral-600 dark:text-neutral-500`}
+          >
             {config.description}
           </p>
         )}
