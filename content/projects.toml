@@ -3,13 +3,13 @@ title = "Projects"
 description = "Selected research projects in migration, legal status, and racial inequality."
 
 [[items]]
-title = "Preferred Profiles of New Immigrants to NYC during the Migrant Influx of the 2020s: A Conjoint Experiment Revealing the Role of Legal Status in Public Opinion"
+title = "Attitudes toward New Immigrants to NYC in the 2020s: A Conjoint Experiment on the Role of Legal Status in Public Opinion in a Major U.S. City"
 subtitle = "Conjoint experiment on migrant preferences, PAA 2026 Oral Session (Laam is the presenter)"
 date = "Ongoing"
 content = """
 A collaborative project examining public attitudes toward new migrants in New York City. The study focuses on how legal status, skill level, family status, and perceived deservingness shape evaluations of migrants in a sanctuary-city context.
 """
-tags = ["Immigration", "Public Opinion", "Conjoint Experiment"]
+tags = ["Immigration", "Public Opinion", "Legal Status", "Conjoint Experiment"]
 
 [[items]]
 title = "A Comparative Analysis of Hate Crimes Against Asians in the USA, 1996–2022"
@@ -29,18 +29,31 @@ date = "2025"
 content = """
 This project examines how patterns of intergenerational support are associated with retirement planning across racial and ethnic groups, with attention to inequality, family structure, and later-life security.
 """
-tags = ["Demography", "Aging", "Family"]
+tags = ["Demography", "Aging", "Family Support"]
 
 
 
 [[items]]
-title = "Reframing (Il)legality, Not Values: New Yorkers’ Perceptions of Migrants and Preferences for Asylum Seekers"
+title = "Reframing (Il)legality: New Yorkers’ Perceptions of Migrants and Attitudes Toward Asylum Adjudication"
 subtitle = "PAA 2026 Poster Session"
 date = "Ongoing"
 content = """
 This project examines how informational cues about migrants’ legal status shape public perceptions and policy attitudes in New York City. Using an embedded experiment in a city-representative survey of 1,250 residents conducted in 2024, the study tests whether clarifying that many recent arrivals are legally present asylum seekers alters perceptions of “illegality” and support for asylum policies. Preliminary findings show that legality clarifications significantly reduce perceived illegality but have no detectable effect on preferences for asylum generosity, suggesting that factual beliefs are more malleable than underlying value-based policy preferences.
 """
 tags = ["Immigration", "Public Opinion", "Legal Status", "Survey Experiment"]
+
+
+
+
+[[items]]
+title = "Who Counts When We Share? National Membership, Redistribution, and Support for Immigrant Inclusion across 29 Countries"
+date = "Ongoing"
+content = """
+When does support for redistribution extend to immigrants? This study examines whether perceived national membership permeability, the belief that belonging can be acquired through effort rather than birth, conditions the support for immigrant inclusion in resource allocation. Using 38,180 respondents across 29 countries from the 2023 International Social Survey Programme (ISSP), we estimate equal-country-weighted OLS models with country fixed effects and clustered standard errors. We develop a typology that combines redistributive preferences with perceived national membership permeability, distinguishing between bounded and inclusive egalitarianism. Our preliminary results found that greater membership permeability is associated with stronger support for inclusion. The association between redistribution and inclusion becomes more positive as membership is perceived as more permeable. This interaction persists across alternative specifications, while country-specific estimates reveal substantial heterogeneity. These findings distinguish bounded from inclusive egalitarianism, suggesting that support for reducing inequality does not necessarily extend across national membership boundaries.
+"""
+tags = ["Immigration", "Membership", "Redistribution Preferences"]
+
+
 
 [[items]]
 title = "The Internal Migration Policies and Skill Selection of Migrant Workers in China – Evidence from the 2014 Hukou Reform"
