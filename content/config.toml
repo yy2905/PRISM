@@ -2,7 +2,7 @@
 title = "Jat Laam Yiu"
 description = "Ph.D. Candidate at the CUNY Graduate Center"
 favicon = "/favicon.svg"
-last_updated = "March 3rd, 2026"
+last_updated = "Oct 20, 2026"
 
 [author]
 name = "Jat Laam Yiu"
@@ -13,7 +13,7 @@ avatar = "/bio.jpg"
 [social]
 # Contact information (leave blank or delete to hide)
 
-email = "yyao1@gradcenter.cuny.edu"
+email = "yyao1@gc.cuny.edu"
 location = "New York, NY, USA"
 location_url = "https://www.google.com/maps/place/CUNY+Graduate+Center/@40.7486484,-73.9865819,17z/data=!3m1!4b1!4m6!3m5!1s0x89c259a9c13c1245:0x840ad2444314fa08!8m2!3d40.7486484!4d-73.984007!16zL20vMDIzYnht?entry=ttu&g_ep=EgoyMDI2MDMwMi4wIKXMDSoASAFQAw%3D%3D"
 location_details = [
